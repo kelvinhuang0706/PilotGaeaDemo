@@ -130,10 +130,11 @@
             text-transform: uppercase;
         }
 
-        /* --- 三大區塊 (Desktop) --- */
+        /* --- 三大區塊 (核心互動區) --- */
         .hero-pillars-container {
             display: flex;
-            height: 55vh; /* 桌機版固定高度 */
+            /* 桌機版高度設定 */
+            height: 55vh; 
             width: 100%;
             border-top: 1px solid rgba(255,255,255,0.1);
             border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -242,55 +243,56 @@
         /* ========================================= */
         @media (max-width: 768px) {
             
-            /* 1. Header 調整：垂直堆疊，縮小間距 */
+            /* 1. Header 調整：緊湊化 */
             header {
                 flex-direction: column;
-                padding: 1.5rem 0;
+                padding: 1rem 0 1.5rem 0;
                 gap: 0.5rem;
                 text-align: center;
             }
-            .logo-img { height: 60px; }
+            .logo-img { height: 50px; } /* 縮小 Logo */
             .brand-text { text-align: center; }
-            h1 { font-size: 1.8rem; letter-spacing: 0.2rem; }
+            h1 { font-size: 1.6rem; letter-spacing: 0.2rem; }
 
-            /* 2. Top Nav 調整：置中，縮小文字 */
+            /* 2. Top Nav 調整 */
             .top-nav-bar {
                 justify-content: center;
                 padding: 0.8rem;
                 flex-wrap: wrap;
                 gap: 1rem;
             }
-            .nav-links { margin-right: 0; gap: 1rem; font-size: 0.75rem; }
+            .nav-links { margin-right: 0; gap: 0.8rem; font-size: 0.75rem; }
 
-            /* 3. 三大區塊調整：變為垂直排列 (Column) */
+            /* 3. 三大區塊調整：(關鍵修正) */
             .hero-pillars-container {
-                flex-direction: column;
-                height: auto; /* 高度自動，隨內容撐開 */
+                flex-direction: column; /* 垂直排列 */
+                height: 60vh; /* 手機版設定總高度 60% 螢幕高度 */
+                min-height: 400px; /* 防止過度壓縮 */
             }
+
             .pillar {
-                height: 300px; /* 手機版每個區塊固定高度 */
+                flex: 1; /* 強制三個區塊均分高度 */
+                height: auto; /* 不再鎖定 300px */
                 width: 100%;
                 border-right: none;
-                border-bottom: 1px solid rgba(255,255,255,0.2);
+                border-bottom: 1px solid rgba(255,255,255,0.3); /* 增加分隔線亮度 */
             }
             
-            /* 手機版移除 hover 擴展效果，避免操作困擾 */
-            .pillar:hover { flex: 1; } 
+            /* 調整手機版內容大小，避免太擠 */
+            .pillar-icon { font-size: 2rem; margin-bottom: 0.2rem; }
+            .title-eng { font-size: 1rem; letter-spacing: 1px; margin-bottom: 0; }
+            .title-cht, .title-en-sub { font-size: 0.85rem; opacity: 0.8; }
 
-            /* 手機版背景圖預設調整：不用太暗，也不要模糊，確保直接可見 */
+            /* 手機版背景圖處理：確保稍微可見 */
             .bg-layer {
-                filter: blur(0px) brightness(0.6) grayscale(20%); 
-                /* 稍微保留一點點暗度讓白字清楚，但不用模糊 */
+                filter: blur(0px) brightness(0.5) grayscale(20%); 
             }
-            .pillar-content { width: 90%; }
-            .pillar-icon { font-size: 2.5rem; }
-            .title-eng { font-size: 1.2rem; }
-
+            
             /* 4. 最新消息與 Footer 調整 */
             .news-section, footer { padding: 2rem 5%; }
             .news-item { flex-direction: column; align-items: flex-start; }
-            .news-date { margin-bottom: 0.5rem; }
-            .footer-info { flex-direction: column; gap: 0.8rem; }
+            .news-date { margin-bottom: 0.3rem; }
+            .footer-info { flex-direction: column; gap: 0.5rem; }
         }
 
     </style>
@@ -303,9 +305,9 @@
                 <span class="lang-tw">成功案例</span>
                 <span class="lang-en">Success Stories</span>
             </div>
-			<div class="nav-item">
+            <div class="nav-item">
                 <span class="lang-tw">功能示範</span>
-                <span class="lang-en">Demo/span>
+                <span class="lang-en">Demo</span>
             </div>
             <div class="nav-item">
                 <span class="lang-tw">聯絡我們</span>
