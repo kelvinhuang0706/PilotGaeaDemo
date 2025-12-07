@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>藏識科技有限公司 | PilotGaea Tech</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+TC:wght@300;400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- 全局變數 --- */
+        :root {
+            --bg-main: #020204;
+            --bg-panel: #0a0a0f;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --accent-color: #4a90e2; 
+            --uav-color: #ff9d00;
+            --gis-color: #00f3ff;
+            --xr-color: #bc13fe;
+        }
+
+        /* --- 基礎設定 --- */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-main);
+            background-image: linear-gradient(rgba(0,0,0,0.92) 50%, rgba(0,0,0,0.92) 50%), url('https://www.transparenttextures.com/patterns/dark-scan.png');
+            font-family: 'Noto Sans TC', 'Roboto', sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .title-eng, .nav-item, .lang-switch {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+
+        /* --- 語言切換控制 --- */
+        .lang-en { display: none; }
+        .lang-tw { display: block; }
+        body.en-mode .lang-tw { display: none !important; }
+        body.en-mode .lang-en { display: block !important; }
+        body.en-mode span.lang-en { display: inline !important; }
+
+        /* --- 頂部導航列 --- */
+        .top-nav-bar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 1rem 5%;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            background: rgba(0,0,0,0.5);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            z-index: 20;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            margin-right: 3rem;
+        }
+
+        .nav-item {
+            color: var(--text-secondary);
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .nav-item:hover {
+            color: var(--gis-color);
+            text-shadow: 0 0 8px var(--gis-color);
+        }
+
+        .lang-switch {
+            display: flex;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+            user-select: none;
+        }
+        .lang-btn { cursor: pointer; transition: color 0.3s; }
+        .lang-btn:hover { color: var(--accent-color); }
+        .lang-btn.active { color: var(--text-primary); font-weight: bold; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+
+        /* --- 頁首品牌區 --- */
+        header {
+            padding: 2rem 0 3rem;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo-img {
+            height: 80px;
+            width: auto;
+            filter: drop-shadow(0 0 10px rgba(74, 144, 226, 0.3));
+        }
+
+        .brand-text { text-align: left; }
+        
+        h1 {
+            font-weight: 700;
+            letter-spacing: 0.5rem;
+            text-transform: uppercase;
+            margin: 0;
+            font-size: 2.2rem;
+            background: linear-gradient(90deg, #fff, #aaa, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        h2 {
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            letter-spacing: 0.2rem;
+            margin-top: 5px;
+            margin-left: 5px;
+            text-transform: uppercase;
+        }
+
+        /* --- 三大區塊 (Desktop) --- */
+        .hero-pillars-container {
+            display: flex;
+            height: 55vh; /* 桌機版固定高度 */
+            width: 100%;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .pillar {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: flex 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+        .pillar:last-child { border-right: none; }
+
+        .bg-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            filter: blur(8px) brightness(0.4) grayscale(50%);
+            transform: scale(1.1);
+            transition: all 0.6s ease;
+        }
+
+        .pillar-content {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 2;
+            width: 85%;
+            pointer-events: none;
+        }
+
+        .pillar-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            text-shadow: 0 0 15px currentColor;
+        }
+
+        .title-eng { font-size: 1.5rem; font-weight: 700; letter-spacing: 2px; display: block; margin-bottom: 0.5rem; }
+        .title-cht, .title-en-sub { font-size: 1.1rem; font-weight: 400; color: rgba(255,255,255,0.9); }
+
+        /* 桌機 Hover 效果 */
+        @media (min-width: 769px) {
+            .pillar:hover { flex: 1.8; }
+            .pillar:hover .bg-layer {
+                filter: blur(0px) brightness(1.1) grayscale(0%);
+                transform: scale(1.2);
+            }
+        }
+
+        /* 背景圖片 */
+        .uav .bg-layer { background-image: url('https://images.unsplash.com/photo-1473968512647-3e447244af8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'); }
+        .uav .pillar-icon { color: var(--uav-color); }
+        .uav:hover { border-top: 3px solid var(--uav-color); }
+
+        .gis .bg-layer { background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'); }
+        .gis .pillar-icon { color: var(--gis-color); }
+        .gis:hover { border-top: 3px solid var(--gis-color); }
+
+        .xr .bg-layer { background-image: url('https://images.unsplash.com/photo-1593508512255-86ab42a8e620?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80'); }
+        .xr .pillar-icon { color: var(--xr-color); }
+        .xr:hover { border-top: 3px solid var(--xr-color); }
+
+
+        /* --- 最新消息 --- */
+        .news-section {
+            padding: 3rem 10%;
+            background-color: var(--bg-panel);
+        }
+        .section-header {
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+        }
+        .section-header h3 { margin: 0; font-size: 1.3rem; letter-spacing: 0.1rem; }
+        
+        .news-list { list-style: none; padding: 0; margin: 0; }
+        .news-item {
+            display: flex; align-items: center; padding: 1rem; margin-bottom: 0.8rem;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .news-item:hover {
+            background: rgba(74, 144, 226, 0.1); border-color: var(--accent-color); transform: translateX(10px);
+        }
+        .news-date { font-family: 'Orbitron', sans-serif; color: var(--accent-color); font-weight: 700; margin-right: 1.5rem; font-size: 0.8rem; white-space: nowrap; }
+        .news-title { font-size: 1rem; font-weight: 300; }
+
+        /* --- Footer --- */
+        footer {
+            background: #000; padding: 3rem 10%; text-align: center; font-size: 0.8rem; color: var(--text-secondary); border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .social-links { margin-bottom: 2rem; display: flex; justify-content: center; gap: 2rem; }
+        .social-icon { font-size: 1.8rem; color: var(--text-secondary); transition: all 0.3s ease; }
+        .social-icon.fb:hover { color: #1877F2; text-shadow: 0 0 15px rgba(24, 119, 242, 0.8); transform: scale(1.2); }
+        .social-icon.yt:hover { color: #FF0000; text-shadow: 0 0 15px rgba(255, 0, 0, 0.8); transform: scale(1.2); }
+        
+        .footer-info { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap; }
+
+        /* ========================================= */
+        /* === RWD 響應式設計 (Mobile Adaptation) === */
+        /* ========================================= */
+        @media (max-width: 768px) {
+            
+            /* 1. Header 調整：垂直堆疊，縮小間距 */
+            header {
+                flex-direction: column;
+                padding: 1.5rem 0;
+                gap: 0.5rem;
+                text-align: center;
+            }
+            .logo-img { height: 60px; }
+            .brand-text { text-align: center; }
+            h1 { font-size: 1.8rem; letter-spacing: 0.2rem; }
+
+            /* 2. Top Nav 調整：置中，縮小文字 */
+            .top-nav-bar {
+                justify-content: center;
+                padding: 0.8rem;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            .nav-links { margin-right: 0; gap: 1rem; font-size: 0.75rem; }
+
+            /* 3. 三大區塊調整：變為垂直排列 (Column) */
+            .hero-pillars-container {
+                flex-direction: column;
+                height: auto; /* 高度自動，隨內容撐開 */
+            }
+            .pillar {
+                height: 300px; /* 手機版每個區塊固定高度 */
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.2);
+            }
+            
+            /* 手機版移除 hover 擴展效果，避免操作困擾 */
+            .pillar:hover { flex: 1; } 
+
+            /* 手機版背景圖預設調整：不用太暗，也不要模糊，確保直接可見 */
+            .bg-layer {
+                filter: blur(0px) brightness(0.6) grayscale(20%); 
+                /* 稍微保留一點點暗度讓白字清楚，但不用模糊 */
+            }
+            .pillar-content { width: 90%; }
+            .pillar-icon { font-size: 2.5rem; }
+            .title-eng { font-size: 1.2rem; }
+
+            /* 4. 最新消息與 Footer 調整 */
+            .news-section, footer { padding: 2rem 5%; }
+            .news-item { flex-direction: column; align-items: flex-start; }
+            .news-date { margin-bottom: 0.5rem; }
+            .footer-info { flex-direction: column; gap: 0.8rem; }
+        }
+
+    </style>
+</head>
+<body class="">
+
+    <nav class="top-nav-bar">
+        <div class="nav-links">
+            <div class="nav-item">
+                <span class="lang-tw">成功案例</span>
+                <span class="lang-en">Success Stories</span>
+            </div>
+			<div class="nav-item">
+                <span class="lang-tw">功能示範</span>
+                <span class="lang-en">Demo/span>
+            </div>
+            <div class="nav-item">
+                <span class="lang-tw">聯絡我們</span>
+                <span class="lang-en">Contact Us</span>
+            </div>
+        </div>
+        <div class="lang-switch">
+            <span class="lang-btn active" id="btn-tw" onclick="setLang('tw')">TW</span> 
+            / 
+            <span class="lang-btn" id="btn-en" onclick="setLang('en')">EN</span>
+        </div>
+    </nav>
+
+    <header>
+        <img src="logo.png" alt="PilotGaea Logo" class="logo-img">
+        <div class="brand-text">
+            <h1>PILOTGAEA</h1>
+            <h2 class="lang-tw">藏識科技有限公司</h2>
+            <h2 class="lang-en">Technologies Ltd.</h2>
+        </div>
+    </header>
+
+    <div class="hero-pillars-container">
+        <div class="pillar uav">
+            <div class="bg-layer"></div>
+            <div class="pillar-content">
+                <span class="pillar-icon">✈</span>
+                <span class="title-eng">UAV AEROSPACE</span>
+                <span class="title-cht lang-tw">無人機航太解決方案</span>
+                <span class="title-en-sub lang-en">UAV Solutions</span>
+            </div>
+        </div>
+
+        <div class="pillar gis">
+            <div class="bg-layer"></div>
+            <div class="pillar-content">
+                <span class="pillar-icon">⚲</span>
+                <span class="title-eng">GIS INTELLIGENCE</span>
+                <span class="title-cht lang-tw">地理資訊系統整合</span>
+                <span class="title-en-sub lang-en">GIS Intelligence</span>
+            </div>
+        </div>
+
+        <div class="pillar xr">
+            <div class="bg-layer"></div>
+            <div class="pillar-content">
+                <span class="pillar-icon">⊡</span>
+                <span class="title-eng">XR SIMULATION</span>
+                <span class="title-cht lang-tw">XR 模擬訓練與應用</span>
+                <span class="title-en-sub lang-en">XR Integration</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="news-section">
+        <div class="section-header">
+            <h3 class="lang-tw">LATEST NEWS / 最新動態</h3>
+            <h3 class="lang-en">LATEST NEWS</h3>
+        </div>
+        
+        <ul class="news-list lang-tw">
+            <li class="news-item">
+                <span class="news-date">2023.10.28</span>
+                <span class="news-title">PilotGaea 發表新一代高精度無人機巡檢系統原型。</span>
+            </li>
+            <li class="news-item">
+                <span class="news-date">2023.10.15</span>
+                <span class="news-title">榮獲 2023 年度智慧城市創新應用獎 - GIS 地下管線管理平台。</span>
+            </li>
+             <li class="news-item">
+                <span class="news-date">2023.09.30</span>
+                <span class="news-title">與消防局合作開發 XR 災害模擬訓練系統，提升救災演練效率。</span>
+            </li>
+        </ul>
+
+        <ul class="news-list lang-en">
+            <li class="news-item">
+                <span class="news-date">2023.10.28</span>
+                <span class="news-title">PilotGaea unveils next-gen autonomous UAV inspection prototype.</span>
+            </li>
+            <li class="news-item">
+                <span class="news-date">2023.10.15</span>
+                <span class="news-title">Awarded "2023 Smart City Innovation" for Underground Pipeline GIS Platform.</span>
+            </li>
+             <li class="news-item">
+                <span class="news-date">2023.09.30</span>
+                <span class="news-title">Collaborating with Fire Dept. to launch XR Disaster Simulation Training System.</span>
+            </li>
+        </ul>
+    </section>
+
+    <footer id="contact">
+        <div class="social-links">
+            <a href="https://www.facebook.com/PilotGaea" target="_blank" class="social-icon fb" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.youtube.com/@pilotgaea006" target="_blank" class="social-icon yt" aria-label="YouTube">
+                <i class="fab fa-youtube"></i>
+            </a>
+        </div>
+
+        <div class="lang-tw">© 2023 PilotGaea Tech. All Rights Reserved. 藏識科技有限公司 版權所有</div>
+        <div class="lang-en">© 2023 PilotGaea Technologies Ltd. All Rights Reserved.</div>
+        
+        <div class="footer-info">
+            <span class="info-item lang-tw">📍 (804)高雄市鼓山區文信路262號6樓</span>
+            <span class="info-item lang-en">📍 6F, No. 262, Wenxin Rd., Gushan Dist., Kaohsiung City 804, Taiwan</span>
+            <span class="info-item">📞 07-5548288</span>
+            <span class="info-item">📠 07-5548289</span>
+        </div>
+    </footer>
+
+    <script>
+        function setLang(lang) {
+            const body = document.body;
+            const btnTw = document.getElementById('btn-tw');
+            const btnEn = document.getElementById('btn-en');
+
+            if (lang === 'en') {
+                body.classList.add('en-mode');
+                btnEn.classList.add('active');
+                btnTw.classList.remove('active');
+            } else {
+                body.classList.remove('en-mode');
+                btnTw.classList.add('active');
+                btnEn.classList.remove('active');
+            }
+        }
+    </script>
+
+</body>
+</html>
